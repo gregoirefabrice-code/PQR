@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur Payconiq</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; border: 1px solid #ddd; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn { 
+            display: block; background-color: #e30613; color: white; text-align: center; 
+            padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h3>Payer via Payconiq</h3>
+    <input type="text" id="iban" placeholder="IBAN (ex: BE...)" oninput="generate()">
+    <input type="text" id="name" placeholder="Nom du bénéficiaire" oninput="generate()">
+    <input type="text" id="comm" placeholder="Communication" oninput="generate()">
+    <input type="number" id="amount" placeholder="Montant (ex: 10.50)" oninput="generate()">
+
+    <a href="#" id="payLink" class="btn">Lancer le paiement</a>
+</div>
+
+<script>
+    function generate() {
+        const iban = document.getElementById('iban').value.replace(/\s/g, '');
+        const name = encodeURIComponent(document.getElementById('name').value);
+        const comm = encodeURIComponent(document.getElementById('comm').value);
+        const amount = document.getElementById('amount').value;
+
+        // On utilise le format intent pour forcer l'ouverture sur Android/iOS
+        // ou le format standardisé de l'app unifiée
+        const link = `https://payconiq.com/pay?i=${iban}&n=${name}&m=${amount}&c=${comm}`;
+        
+        // Alternative si le lien HTTPS ne réagit pas sur ton modèle :
+        // const link = `payconiq://pay?iban=${iban}&amount=${amount}&name=${name}&description=${comm}`;
+
+        document.getElementById('payLink').href = link;
+    }
+</script>
+
+</body>
+</html>
