@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Paiement Payconiq</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; text-align: center; margin-bottom: 1.5rem; }
+        .field { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .btn-container { margin-top: 2rem; text-align: center; }
+        #payButton {
+            background-color: #00afea;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        #payButton:hover { background-color: #008fbf; transform: scale(1.05); }
+        .hint { font-size: 0.8rem; color: #999; margin-top: 1rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Paiement Payconiq</h2>
+    
+    <div class="field">
+        <label for="iban">IBAN du bénéficiaire</label>
+        <input type="text" id="iban" placeholder="BE00 0000 0000 0000" oninput="updateLink()">
+    </div>
+
+    <div class="field">
+        <label for="name">Nom</label>
+        <input type="text" id="name" placeholder="Ex: Jean Dupont" oninput="updateLink()">
+    </div>
+
+    <div class="field">
+        <label for="comm">Communication</label>
+        <input type="text" id="comm" placeholder="Ex: Loyer ou Pizza" oninput="updateLink()">
+    </div>
+
+    <div class="field">
+        <label for="amount">Montant (€)</label>
+        <input type="number" id="amount" step="0.01" placeholder="0.00" oninput="updateLink()">
+    </div>
+
+    <div class="btn-container">
+        <a href="#" id="payButton">Ouvrir Payconiq</a>
+    </div>
+
+    <p class="hint">Fonctionne uniquement sur smartphone avec l'application installée.</p>
+</div>
+
+<script>
+    function updateLink() {
+        // Récupération des valeurs
+        const iban = document.getElementById('iban').value.replace(/\s+/g, ''); // Enlever les espaces
+        const name = encodeURIComponent(document.getElementById('name').value);
+        const comm = encodeURIComponent(document.getElementById('comm').value);
+        const amount = document.getElementById('amount').value;
+
+        // Construction du lien profond (Deep Link)
+        // Format: bancontact://pay?IBAN=...&NAME=...&REMITTANCE=...&AMOUNT=...
+        const link = `bancontact://pay?IBAN=${iban}&NAME=${name}&REMITTANCE=${comm}&AMOUNT=${amount}`;
+        
+        // Mise à jour du bouton
+        document.getElementById('payButton').href = link;
+    }
+
+    // Initialisation au chargement
+    updateLink();
+</script>
+
+</body>
+</html>
