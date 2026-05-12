@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lien Payconiq Direct</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; margin: 0; background-color: #f4f7f9; 
+        }
+        .box { 
+            background: white; padding: 25px; border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 90%; max-width: 380px; 
+        }
+        input { 
+            width: 100%; padding: 12px; margin: 8px 0; 
+            border: 1px solid #ddd; border-radius: 10px; font-size: 16px; 
+        }
+        .btn { 
+            display: block; background-color: #00afea; color: white; 
+            text-align: center; padding: 18px; border-radius: 12px; 
+            text-decoration: none; font-weight: bold; margin-top: 15px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2 style="text-align:center; margin-top:0;">📱 Envoi Bancontact</h2>
+    
+    <input type="text" id="name" placeholder="Nom du bénéficiaire">
+    <input type="text" id="iban" placeholder="IBAN (ex: BE...)">
+    <input type="number" id="amount" step="0.01" placeholder="Montant (€)">
+    <input type="text" id="comm" placeholder="Communication">
+
+    <a href="#" id="payBtn" onclick="lancerPaiement(event)" class="btn">Ouvrir Bancontact Pay</a>
+</div>
+
+<script>
+    function lancerPaiement(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const iban = document.getElementById('iban').value.replace(/\s+/g, '');
+        const amount = document.getElementById('amount').value;
+        const comm = document.getElementById('comm').value;
+
+        if(!iban || !amount) {
+            alert("Remplis au moins l'IBAN et le Montant !");
+            return;
+        }
+
+        // LE LIEN MAGIQUE : 
+        // Ce format est celui utilisé pour les virements SEPA par lien.
+        // L'app Payconiq le reconnaît comme un "remboursement d'ami" et non un commerçant.
+        const url = `https://payconiq.com/pay/1/sct?iban=${iban}&amount=${amount}&name=${encodeURIComponent(name)}&description=${encodeURIComponent(comm)}`;
+
+        window.location.href = url;
+    }
+</script>
+
+</body>
+</html>
